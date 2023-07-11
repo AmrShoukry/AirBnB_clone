@@ -6,7 +6,8 @@ every class inherits from this class
 
 import uuid
 from datetime import datetime
-from . import storage
+from __init__ import storage
+
 
 class BaseModel:
     """

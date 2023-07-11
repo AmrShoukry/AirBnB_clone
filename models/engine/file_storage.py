@@ -3,6 +3,7 @@
 
 import json
 import os
+from datetime import datetime
 
 
 class FileStorage:
@@ -16,8 +17,15 @@ class FileStorage:
 
     def new(self, obj):
         """ sets in __objects the obj with key <obj class name>.id """
-        text_format = f"[BaseModel] ({obj.id}) {obj.to_dict()}"
+        formatted_dict = self.dict_iso_to_datetime(obj.to_dict())
+        text_format = f"[BaseModel] ({obj.id}) {formatted_dict}"
         self.__objects[f"{type(obj).__name__}.{obj.id}"] = text_format
+
+    @staticmethod
+    def dict_iso_to_datetime(my_dict):
+        my_dict["updated_at"] = datetime.fromisoformat(my_dict["updated_at"])
+        my_dict["created_at"] = datetime.fromisoformat(my_dict["created_at"])
+        return my_dict
 
     def save(self):
         """ serializes __objects to the JSON file (path: __file_path) """
