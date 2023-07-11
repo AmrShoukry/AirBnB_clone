@@ -43,3 +43,17 @@ class FileStorage:
         if key in self.__objects:
             return self.__objects[key]
         return False
+
+    def destroy(self, key):
+        if key in self.__objects:
+            del self.__objects[key]
+            self.save()
+            return True
+        return False
+
+    def get_all_of_class(self, class_name):
+        result = []
+        for key in self.__objects.keys():
+            if key.startswith(class_name):
+                result.append(self.__objects[key])
+        return result
