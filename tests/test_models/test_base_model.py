@@ -27,7 +27,6 @@ class TestBaseModel(unittest.TestCase):
         """ Testing to_dict(self) """
         expected_dic = self.my_model.to_dict()
         keys = ["id", "created_at", "updated_at", "__class__"]
-
         for key in keys:
             self.assertIn(key, expected_dic)
 
