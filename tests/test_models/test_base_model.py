@@ -3,6 +3,7 @@ import datetime
 from models.base_model import BaseModel
 """ Testing base model """
 
+
 class TestBaseModel(unittest.TestCase):
     """ Test class """
 
@@ -18,7 +19,8 @@ class TestBaseModel(unittest.TestCase):
 
     def test_str(self):
         """ Testing __str__(self) """
-        expected_output = f"[BaseModel] ({self.my_model.id}) ({self.my_model.__dict__})"
+        id = self.my_model.id
+        expected_output = f"[BaseModel] ({id}) ({self.my_model.__dict__})"
         self.assertEqual(str(self.my_model), expected_output)
 
     def test_to_dict(self):
