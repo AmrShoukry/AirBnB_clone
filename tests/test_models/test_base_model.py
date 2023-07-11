@@ -1,5 +1,5 @@
 import unittest
-import datetime
+from datetime import datetime
 from models.base_model import BaseModel
 """ Testing base model """
 
@@ -33,5 +33,5 @@ class TestBaseModel(unittest.TestCase):
     def test_save(self):
         """ Testing save(self) """
         old_update = self.my_model.updated_at
-        self.my_model.save(self)
+        self.my_model.save()
         self.assertNotEqual(old_update, self.my_model.updated_at)
