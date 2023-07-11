@@ -38,3 +38,8 @@ class FileStorage:
         if os.path.exists(self.__file_path):
             with open(self.__file_path, "r") as file:
                 self.__objects = json.load(file)
+
+    def search(self, key):
+        if key in self.__objects:
+            return self.__objects[key]
+        return False
