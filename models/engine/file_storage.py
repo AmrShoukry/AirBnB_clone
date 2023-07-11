@@ -23,6 +23,7 @@ class FileStorage:
 
     @staticmethod
     def dict_iso_to_datetime(my_dict):
+        """takes my_dict and converts the isoformat to datetime format"""
         my_dict["updated_at"] = datetime.fromisoformat(my_dict["updated_at"])
         my_dict["created_at"] = datetime.fromisoformat(my_dict["created_at"])
         return my_dict
