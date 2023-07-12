@@ -8,6 +8,11 @@ import json
 from datetime import datetime
 import re
 from models.user import User
+from models.user import State
+from models.user import City
+from models.user import Amenity
+from models.user import Place
+from models.user import Review
 
 
 class HBNBCommand(cmd.Cmd):
@@ -16,6 +21,11 @@ class HBNBCommand(cmd.Cmd):
     my_classes = {
         "BaseModel": BaseModel,
         "User": User,
+        "State": State,
+        "City": City,
+        "Amenity": Amenity,
+        "Place": Place,
+        "Review": Review
     }
 
     def check_arg_validity_classes(self, args):
@@ -84,7 +94,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, line):
         args = line.split(" ")
-        if args[0] == "" or self.check_arg_validity_classes(args):
+        if args[0] == "" or self.check_arg_validity_classes(args) is False:
             result = storage.get_all_of_class(args[0])
             for class_instance in result:
                 print(class_instance)
@@ -100,7 +110,12 @@ class HBNBCommand(cmd.Cmd):
             datetime_str = date_string.group(1)
             created_at = datetime.strptime(datetime_str, "%Y, %m, %d, %H, %M, %S, %f")
 
-            search_dict_text = re.sub(r"'\w+': datetime\.datetime\(.*\), ", "", search_dict_text)
+            date_string = re.search(r"'updated_at': datetime\.datetime\((.*?)\)", search_dict_text)
+            datetime_str = date_string.group(1)
+            updated_at = datetime.strptime(datetime_str, "%Y, %m, %d, %H, %M, %S, %f")
+
+            search_dict_text = re.sub(r"(, )?'created_at': datetime\.datetime\(.*?\)", "", search_dict_text)
+            search_dict_text = re.sub(r"(, )?'updated_at': datetime\.datetime\(.*?\)", "", search_dict_text)
             search_dict_text = search_dict_text.replace("'", "\"")
 
             search_dict = json.loads(search_dict_text)
@@ -110,9 +125,8 @@ class HBNBCommand(cmd.Cmd):
             storage.destroy(search_key)
 
             created_class = self.my_classes[args[0]]()
-            updated_at = datetime.now()
             
-            storage.update_new(created_class, id, created_at, updated_at, args[2], args[3])
+            storage.update_new(created_class, id, created_at, updated_at, args[2], args[3])                
             storage.save()
 
 
