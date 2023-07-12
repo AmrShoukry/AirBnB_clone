@@ -2,6 +2,9 @@
 """module that houses the user class"""
 
 from models.base_model import BaseModel
+from datetime import datetime
+from . import storage
+
 
 class User(BaseModel):
     """this is the class for our users"""
@@ -17,6 +20,12 @@ class User(BaseModel):
         :return: the string representation of this class
         """
         return f"[User] ({self.id}) {self.__dict__}"
+
+    def save(self):
+        """
+        TODO
+        """
+        pass
 
     def to_dict(self):
         result_dict = super().to_dict()
