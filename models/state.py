@@ -6,10 +6,7 @@ from datetime import datetime
 from . import storage
 
 
-class User(BaseModel):
-    """this is the class for our users"""
+class State(BaseModel):
+    """this is the class for our states"""
 
-    email = ""
-    password = ""
-    first_name = ""
-    last_name = ""
+    name = ""

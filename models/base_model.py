@@ -40,7 +40,7 @@ class BaseModel:
         this is the string representation of this class
         :return: the string representation of this class
         """
-        return f"[BaseModel] ({self.id}) {self.__dict__}"
+        return f"[{type(self).__name__}] ({self.id}) {self.__dict__}"
 
     def save(self):
         """
@@ -55,7 +55,7 @@ class BaseModel:
         :return: the dict representation of the class
         """
         my_dict = self.__dict__.copy()
-        my_dict["__class__"] = "BaseModel"
+        my_dict["__class__"] = f"{type(self).__name__}"
         my_dict["updated_at"] = self.updated_at.isoformat()
         my_dict["created_at"] = self.created_at.isoformat()
         return my_dict
