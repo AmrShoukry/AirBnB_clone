@@ -25,7 +25,7 @@ class FileStorage:
     def new(self, obj):
         """ sets in __objects the obj with key <obj class name>.id """
         formatted_dict = self.dict_iso_to_datetime(obj.to_dict())
-        text_format = f"[BaseModel] ({obj.id}) {formatted_dict}"
+        text_format = f"[{type(obj).__name__}] ({obj.id}) {formatted_dict}"
         self.__objects[f"{type(obj).__name__}.{obj.id}"] = text_format
 
     @staticmethod
