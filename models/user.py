@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """module that houses the user class"""
 
-from base_model import BaseModel
+from models.base_model import BaseModel
 
 class User(BaseModel):
     """this is the class for our users"""
@@ -11,3 +11,14 @@ class User(BaseModel):
     first_name = ""
     last_name = ""
 
+    def __str__(self):
+        """
+        this is the string representation of this class
+        :return: the string representation of this class
+        """
+        return f"[User] ({self.id}) {self.__dict__}"
+
+    def to_dict(self):
+        result_dict = super().to_dict()
+        result_dict["__class__"] = "User"
+        return result_dict

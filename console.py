@@ -7,14 +7,15 @@ from models import storage
 import json
 from datetime import datetime
 import re
-
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
     """this is the console using the Cmd module"""
     prompt = "(hbnb) "
     my_classes = {
-        "BaseModel": BaseModel
+        "BaseModel": BaseModel,
+        "User": User,
     }
 
     def check_arg_validity_classes(self, args):

@@ -38,7 +38,7 @@ class BaseModel:
     def __str__(self):
         """
         this is the string representation of this class
-        :return: None
+        :return: the string representation of this class
         """
         return f"[BaseModel] ({self.id}) {self.__dict__}"
 
