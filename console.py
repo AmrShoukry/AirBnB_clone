@@ -3,7 +3,6 @@
 
 import cmd
 from models.base_model import BaseModel
-from models.engine.file_storage import FileStorage
 from models import storage
 import json
 from datetime import datetime
@@ -53,8 +52,6 @@ class HBNBCommand(cmd.Cmd):
             return True
         elif args[2] == "id" or args[2] == "created_at" or args[2] == "updated_at":
             return True
-        # elif not (type(args[2]) is str or type(args[2]) is float or type(args[2]) is int):
-        #     return True
         return search_key
 
     def do_quit(self, line):
