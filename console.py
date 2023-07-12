@@ -84,12 +84,10 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, line):
         args = line.split(" ")
-        if self.check_arg_validity_classes(args):
+        if args[0] == "" or self.check_arg_validity_classes(args):
             result = storage.get_all_of_class(args[0])
             for class_instance in result:
                 print(class_instance)
-
-
 
     def do_update(self, line):
         args = line.split(" ")
