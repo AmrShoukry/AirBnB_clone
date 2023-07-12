@@ -15,6 +15,13 @@ class FileStorage:
         """ returns the dictionary """
         return self.__objects
 
+    def update_new(self, obj, id, created_at, updated_at, key, value):
+        setattr(obj, key, value)
+        obj.id = id
+        obj.created_at = created_at
+        obj.updated_at = updated_at
+        self.new(obj)
+
     def new(self, obj):
         """ sets in __objects the obj with key <obj class name>.id """
         formatted_dict = self.dict_iso_to_datetime(obj.to_dict())

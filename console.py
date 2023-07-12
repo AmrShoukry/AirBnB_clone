@@ -5,11 +5,15 @@ import cmd
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 from models import storage
+import json
+from datetime import datetime
+import re
+
 
 
 class HBNBCommand(cmd.Cmd):
     """this is the console using the Cmd module"""
-    prompt = "(hbnb)"
+    prompt = "(hbnb) "
     my_classes = {
         "BaseModel": BaseModel
     }
@@ -51,7 +55,7 @@ class HBNBCommand(cmd.Cmd):
             return True
         # elif not (type(args[2]) is str or type(args[2]) is float or type(args[2]) is int):
         #     return True
-        return search_key, args[2], args[3]
+        return search_key
 
     def do_quit(self, line):
         """quits the program"""
@@ -87,14 +91,34 @@ class HBNBCommand(cmd.Cmd):
             for class_instance in result:
                 print(class_instance)
 
+
+
     def do_update(self, line):
         args = line.split(" ")
-        search_key, key, value = self.check_arg_validity_classes_attributes(args)
-        search_instance = storage.search(search_key)
+        search_key = self.check_arg_validity_classes_attributes(args)
         if search_key is not True:
-            # storage.destroy(search_key)
-            # storage.new_and_update(search_key)
-            pass
+            search_instance = storage.search(search_key)
+            search_dict_text = search_instance.split(")", 1)[1]
+
+            date_string = re.search(r"'created_at': datetime\.datetime\((.*?)\)", search_dict_text)
+            datetime_str = date_string.group(1)
+            created_at = datetime.strptime(datetime_str, "%Y, %m, %d, %H, %M, %S, %f")
+
+            search_dict_text = re.sub(r"'\w+': datetime\.datetime\(.*\), ", "", search_dict_text)
+            search_dict_text = search_dict_text.replace("'", "\"")
+
+            search_dict = json.loads(search_dict_text)
+
+            id = search_dict["id"]
+
+            storage.destroy(search_key)
+
+            created_class = self.my_classes[args[0]]()
+            updated_at = datetime.now()
+            
+            storage.update_new(created_class, id, created_at, updated_at, args[2], args[3])
+            storage.save()
+
 
 
     def do_EOF(self, line):
