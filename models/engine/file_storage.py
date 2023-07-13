@@ -16,6 +16,7 @@ class FileStorage:
         return self.__objects
 
     def update_new(self, obj, id, created_at, updated_at, key, value):
+        """creates a new instance of a class as a means of updating it"""
         setattr(obj, key, value)
         obj.id = id
         obj.created_at = created_at
@@ -41,17 +42,19 @@ class FileStorage:
             file.write(json.dumps(self.__objects))
 
     def reload(self):
-        """ deserialize """
+        """deserializeses into __objects from the JSON file (path: __file_path)"""
         if os.path.exists(self.__file_path):
             with open(self.__file_path, "r") as file:
                 self.__objects = json.load(file)
 
     def search(self, key):
+        """searches for a class given a key of classname.id"""
         if key in self.__objects:
             return self.__objects[key]
         return False
 
     def destroy(self, key):
+        """destroys an instance of a class given classname and id"""
         if key in self.__objects:
             del self.__objects[key]
             self.save()
@@ -59,6 +62,7 @@ class FileStorage:
         return False
 
     def get_all_of_class(self, class_name):
+        """shows all of a certain class, or all if no class is given"""
         result = []
         for key in self.__objects.keys():
             if key.startswith(class_name):
