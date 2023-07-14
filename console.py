@@ -67,6 +67,86 @@ class HBNBCommand(cmd.Cmd):
         elif args[2] == "id" or args[2] == "created_at" or args[2] == "updated_at":
             return True
         return search_key
+    
+    def onecmd(self, line):
+        arguments = line.split(".")
+        if arguments[0] in self.my_classes and len(arguments) > 1:
+            if arguments[1] == "all()":
+                self.do_all(arguments[0])
+            elif arguments[1] == "count()":
+                print(storage.count_class(arguments[0]))
+            elif arguments[1].startswith("show"):
+                id = self.extract_id(arguments[0], arguments[1])
+                if id != False:
+                    self.do_show(f"{arguments[0]} {id}")
+            elif arguments[1].startswith("destroy"):
+                id = self.extract_id(arguments[0], arguments[1])
+                if id != False:
+                    self.do_destroy(f"{arguments[0]} {id}")
+            elif arguments[1].startswith("update"):
+                id = self.extract_id(arguments[0], arguments[1])
+                if id != False:
+                    self.update(arguments[0], arguments[1], id)
+            else:
+                return super().onecmd(line)
+        
+        else:
+            return super().onecmd(line)
+        
+    def extract_id(self, class_name, line):
+        id_regex = re.search(r"(\w{0,8}-\w{0,4}-\w{0,4}-\w{0,4}-\w{0,12})", line)
+        try:
+            id = id_regex.group(0)
+        except:
+            print("** no instance found **")
+            return False
+        if len(id) == 36:
+            search_key = f"{class_name}.{id}"
+            search_result = storage.search(search_key)
+            if search_result is False:
+                print("** no instance found **")
+                return False
+            else:
+                return id
+        else:
+            print("** no instance found **")
+            return False
+
+        # id_array = line.split("(\"")
+        # if len(id_array) > 1:
+        #     search_key = f"{class_name}.{id_array[1][:-2]}"
+        #     search_result = storage.search(search_key)
+        #     if search_result is False:
+        #         print("** no instance found **")
+        #         return False
+        #     else:
+        #         return id_array[1][:-2]
+        # else:
+        #     print("** no instance found **")
+        #     return False
+
+
+    def update(self, class_name, line, id):
+        array = line.split(", ")
+        if array[1].startswith("{"):
+            dictionary_string = line.split(", ", 1)[1][:-1]
+            dictionary = json.loads(dictionary_string)
+            self.update_dictionary(dictionary, class_name, id)
+        elif len(array) >= 3:
+            key = array[1].replace("\"", "")
+            value = array[2].replace("\"", "")
+            value = value.replace(")", "")
+            self.do_update(f"{class_name} {id} {key} {value}")
+        elif len(array) == 2:
+            print("** value missing **")
+        else:
+            print("** attribute name missing **")
+
+    
+    def update_dictionary(self, dictionary, class_name, id):
+        for key, value in dictionary.items():
+            self.do_update(f"{class_name} {id} {key} {value}")
+        
 
     def do_quit(self, line):
         """quits the program"""
@@ -124,16 +204,13 @@ class HBNBCommand(cmd.Cmd):
             search_dict_text = re.sub(r"(, )?'created_at': datetime\.datetime\(.*?\)", "", search_dict_text)
             search_dict_text = re.sub(r"(, )?'updated_at': datetime\.datetime\(.*?\)", "", search_dict_text)
             search_dict_text = search_dict_text.replace("'", "\"")
-
             search_dict = json.loads(search_dict_text)
-
-            id = search_dict["id"]
 
             storage.destroy(search_key)
 
             created_class = self.my_classes[args[0]]()
             
-            storage.update_new(created_class, id, created_at, updated_at, args[2], args[3])                
+            storage.update_new(created_class, search_dict, created_at, updated_at, args[2], args[3])                
             storage.save()
 
     def do_EOF(self, line):

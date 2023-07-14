@@ -15,12 +15,15 @@ class FileStorage:
         """ returns the dictionary """
         return self.__objects
 
-    def update_new(self, obj, id, created_at, updated_at, key, value):
+    def update_new(self, obj, search_dict, created_at, updated_at, key, value):
         """creates a new instance of a class as a means of updating it"""
         setattr(obj, key, value)
-        obj.id = id
         obj.created_at = created_at
         obj.updated_at = updated_at
+        for dict_key, dict_value in search_dict.items():
+            if dict_key == "__class__":
+                continue
+            setattr(obj, dict_key, dict_value)
         self.new(obj)
 
     def new(self, obj):
@@ -68,3 +71,10 @@ class FileStorage:
             if key.startswith(class_name):
                 result.append(self.__objects[key])
         return result
+    
+    def count_class(self, class_name):
+        count = 0
+        for key in self.__objects.keys():
+            if key.startswith(class_name):
+                count += 1
+        return count
