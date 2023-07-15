@@ -5,6 +5,7 @@ import cmd
 from models.base_model import BaseModel
 from models import storage
 import json
+import shlex
 from datetime import datetime
 import re
 from models.user import User
@@ -176,34 +177,11 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, line):
         """updates the class args[0] with the variable args[1]"""
-        args = line.split(" ")
+        args = shlex.split(line)
         search_key = self.check_arg_validity_classes_attributes(args)
         if search_key is not True:
             search_instance = storage.search(search_key)
-            search_dict_text = search_instance.split(")", 1)[1]
-
-            created_regex = r"'created_at': datetime\.datetime\((.*?)\)"
-            date_string = re.search(created_regex, search_dict_text)
-            dtstr = date_string.group(1)
-            ctd_at = datetime.strptime(dtstr, "%Y, %m, %d, %H, %M, %S, %f")
-
-            updated_regex = r"'updated_at': datetime\.datetime\((.*?)\)"
-            date_string = re.search(updated_regex, search_dict_text)
-            dtstr = date_string.group(1)
-            upd_at = datetime.strptime(dtstr, "%Y, %m, %d, %H, %M, %S, %f")
-
-            created_regex_2 = r"(, )?'created_at': datetime\.datetime\(.*?\)"
-            updated_regex_2 = r"(, )?'updated_at': datetime\.datetime\(.*?\)"
-            search_dict_text = re.sub(created_regex_2, "", search_dict_text)
-            search_dict_text = re.sub(updated_regex_2, "", search_dict_text)
-            search_dict_text = search_dict_text.replace("'", "\"")
-            srh = json.loads(search_dict_text)
-
-            storage.destroy(search_key)
-
-            crtcls = self.my_classes[args[0]]()
-
-            storage.update_new(crtcls, srh, ctd_at, upd_at, args[2], args[3])
+            setattr(search_instance, args[2], args[3])
             storage.save()
 
     def do_EOF(self, line):

@@ -11,6 +11,7 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 
+
 class FileStorage:
     """ File Storage Class """
     __file_path = "file.json"
@@ -43,3 +44,34 @@ class FileStorage:
                     value = object_list[key]
                     class_type = value["__class__"]
                     self.__objects[key] = eval(class_type)(**value)
+
+    def search(self, key):
+        """searches for a class given a key of classname.id"""
+        if key in self.__objects:
+            return self.__objects[key]
+        return False
+
+    def destroy(self, key):
+        """destroys an instance of a class given classname and id"""
+        if key in self.__objects:
+            del self.__objects[key]
+            self.save()
+            return True
+        return False
+
+    def get_all_of_class(self, class_name):
+        """shows all string representations of a certain class,
+         or all if no class is given"""
+        result = []
+        for key in self.__objects.keys():
+            if key.startswith(class_name):
+                result.append(self.__objects[key].__str__())
+        return result
+
+    def count_class(self, class_name):
+        """Count number of classes of a specific type"""
+        count = 0
+        for key in self.__objects.keys():
+            if key.startswith(class_name):
+                count += 1
+        return count
