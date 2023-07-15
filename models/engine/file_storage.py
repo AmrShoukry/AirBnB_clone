@@ -36,4 +36,5 @@ class FileStorage:
                 object_list = json.loads(file_data)
                 for key in object_list.keys():
                     value = object_list[key]
-                    self.__objects[key] = eval(value["__class__"])(**value)
+                    class_type = value["__class__"]
+                    self.__objects[key] = eval(class_type)(**value)
