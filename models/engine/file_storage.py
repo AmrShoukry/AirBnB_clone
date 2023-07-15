@@ -45,7 +45,7 @@ class FileStorage:
             file.write(json.dumps(self.__objects))
 
     def reload(self):
-        """deserializeses into __objects from the JSON file (path: __file_path)"""
+        """deserializeses into __objects from the JSON file"""
         if os.path.exists(self.__file_path):
             with open(self.__file_path, "r") as file:
                 self.__objects = json.load(file)
@@ -71,8 +71,9 @@ class FileStorage:
             if key.startswith(class_name):
                 result.append(self.__objects[key])
         return result
-    
+
     def count_class(self, class_name):
+        """Count number of classes of a specific type"""
         count = 0
         for key in self.__objects.keys():
             if key.startswith(class_name):

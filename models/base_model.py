@@ -47,6 +47,7 @@ class BaseModel:
         only modifies the updated_at variable
         """
         self.updated_at = datetime.now()
+        storage.new(self)
         storage.save()
 
     def to_dict(self):

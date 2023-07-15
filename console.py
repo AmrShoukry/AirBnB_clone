@@ -56,6 +56,7 @@ class HBNBCommand(cmd.Cmd):
     def check_arg_validity_classes_attributes(self, args):
         """checks all as previous with extra check for attributes as dict"""
         search_key = self.check_arg_validity_classes_ids(args)
+        args_search = ["id", "created_at", "updated_at"]
         if search_key is True:
             return True
         elif len(args) < 3:
@@ -64,11 +65,12 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) < 4:
             print("** value missing **")
             return True
-        elif args[2] == "id" or args[2] == "created_at" or args[2] == "updated_at":
+        elif args[2] in args_search:
             return True
         return search_key
-    
+
     def onecmd(self, line):
+        """implement spcific commands"""
         arguments = line.split(".")
         if arguments[0] in self.my_classes and len(arguments) > 1:
             if arguments[1] == "all()":
@@ -77,27 +79,28 @@ class HBNBCommand(cmd.Cmd):
                 print(storage.count_class(arguments[0]))
             elif arguments[1].startswith("show"):
                 id = self.extract_id(arguments[0], arguments[1])
-                if id != False:
+                if id is not False:
                     self.do_show(f"{arguments[0]} {id}")
             elif arguments[1].startswith("destroy"):
                 id = self.extract_id(arguments[0], arguments[1])
-                if id != False:
+                if id is not False:
                     self.do_destroy(f"{arguments[0]} {id}")
             elif arguments[1].startswith("update"):
                 id = self.extract_id(arguments[0], arguments[1])
-                if id != False:
+                if id is not False:
                     self.update(arguments[0], arguments[1], id)
             else:
                 return super().onecmd(line)
-        
+
         else:
             return super().onecmd(line)
-        
+
     def extract_id(self, class_name, line):
-        id_regex = re.search(r"(\w{0,8}-\w{0,4}-\w{0,4}-\w{0,4}-\w{0,12})", line)
+        """extract class id"""
+        id_rgx = re.search(r"(\w{0,8}-\w{0,4}-\w{0,4}-\w{0,4}-\w{0,12})", line)
         try:
-            id = id_regex.group(0)
-        except:
+            id = id_rgx.group(0)
+        except Exception:
             print("** no instance found **")
             return False
         if len(id) == 36:
@@ -112,21 +115,8 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
             return False
 
-        # id_array = line.split("(\"")
-        # if len(id_array) > 1:
-        #     search_key = f"{class_name}.{id_array[1][:-2]}"
-        #     search_result = storage.search(search_key)
-        #     if search_result is False:
-        #         print("** no instance found **")
-        #         return False
-        #     else:
-        #         return id_array[1][:-2]
-        # else:
-        #     print("** no instance found **")
-        #     return False
-
-
     def update(self, class_name, line, id):
+        """update values"""
         array = line.split(", ")
         if array[1].startswith("{"):
             dictionary_string = line.split(", ", 1)[1][:-1]
@@ -142,11 +132,10 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** attribute name missing **")
 
-    
     def update_dictionary(self, dictionary, class_name, id):
+        """updates values based on dictionary"""
         for key, value in dictionary.items():
             self.do_update(f"{class_name} {id} {key} {value}")
-        
 
     def do_quit(self, line):
         """quits the program"""
@@ -193,24 +182,28 @@ class HBNBCommand(cmd.Cmd):
             search_instance = storage.search(search_key)
             search_dict_text = search_instance.split(")", 1)[1]
 
-            date_string = re.search(r"'created_at': datetime\.datetime\((.*?)\)", search_dict_text)
-            datetime_str = date_string.group(1)
-            created_at = datetime.strptime(datetime_str, "%Y, %m, %d, %H, %M, %S, %f")
+            created_regex = r"'created_at': datetime\.datetime\((.*?)\)"
+            date_string = re.search(created_regex, search_dict_text)
+            dtstr = date_string.group(1)
+            ctd_at = datetime.strptime(dtstr, "%Y, %m, %d, %H, %M, %S, %f")
 
-            date_string = re.search(r"'updated_at': datetime\.datetime\((.*?)\)", search_dict_text)
-            datetime_str = date_string.group(1)
-            updated_at = datetime.strptime(datetime_str, "%Y, %m, %d, %H, %M, %S, %f")
+            updated_regex = r"'updated_at': datetime\.datetime\((.*?)\)"
+            date_string = re.search(updated_regex, search_dict_text)
+            dtstr = date_string.group(1)
+            upd_at = datetime.strptime(dtstr, "%Y, %m, %d, %H, %M, %S, %f")
 
-            search_dict_text = re.sub(r"(, )?'created_at': datetime\.datetime\(.*?\)", "", search_dict_text)
-            search_dict_text = re.sub(r"(, )?'updated_at': datetime\.datetime\(.*?\)", "", search_dict_text)
+            created_regex_2 = r"(, )?'created_at': datetime\.datetime\(.*?\)"
+            updated_regex_2 = r"(, )?'updated_at': datetime\.datetime\(.*?\)"
+            search_dict_text = re.sub(created_regex_2, "", search_dict_text)
+            search_dict_text = re.sub(updated_regex_2, "", search_dict_text)
             search_dict_text = search_dict_text.replace("'", "\"")
-            search_dict = json.loads(search_dict_text)
+            srh = json.loads(search_dict_text)
 
             storage.destroy(search_key)
 
-            created_class = self.my_classes[args[0]]()
-            
-            storage.update_new(created_class, search_dict, created_at, updated_at, args[2], args[3])                
+            crtcls = self.my_classes[args[0]]()
+
+            storage.update_new(crtcls, srh, ctd_at, upd_at, args[2], args[3])
             storage.save()
 
     def do_EOF(self, line):

@@ -10,4 +10,3 @@ class Amenity(BaseModel):
     """this is the class for our amenities"""
 
     name = ""
-
