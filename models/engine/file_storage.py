@@ -33,13 +33,13 @@ class FileStorage:
         for key in self.__objects.keys():
             value = self.__objects[key]
             to_be_written[key] = value.to_dict()
-        with open(self.__file_path, "w") as file:
+        with open(self.__file_path, "w", encoding='utf-8') as file:
             file.write(json.dumps(to_be_written))
 
     def reload(self):
         """deserializes into __objects from the JSON file"""
         if os.path.exists(self.__file_path):
-            with open(self.__file_path, "r") as file:
+            with open(self.__file_path, "r", encoding='utf-8') as file:
                 file_data = file.read()
                 object_list = json.loads(file_data)
                 for key in object_list.keys():
