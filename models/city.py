@@ -2,8 +2,6 @@
 """module that houses the user class"""
 
 from models.base_model import BaseModel
-from datetime import datetime
-from . import storage
 
 
 class City(BaseModel):
