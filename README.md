@@ -1,6 +1,9 @@
-you can start the command interpreter by moving to the root folder (/AirBnB_clone).
-after starting it you will see a prompt in the form of (hbnb), this means that the program is running successfully
+instructions for starting:
+  you can start the command interpreter by moving to the root folder (/AirBnB_clone).
+  after starting it you will see a prompt in the form of (hbnb), this means that the program is running  successfully
+
 here is a list of the commands that you can use and an example -or more- for each of them:
+
 1-quit: this command exits the command line interpreter.
 
 2-create: this command takes one argument in the form of the class that you wish to create.
