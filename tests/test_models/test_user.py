@@ -38,4 +38,5 @@ class TestConsole(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    """this is the main for the test module"""
     unittest.main()
