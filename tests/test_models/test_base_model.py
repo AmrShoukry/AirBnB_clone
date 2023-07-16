@@ -1,7 +1,8 @@
+#!/usr/bin/python3
+""" Testing base model """
 import unittest
 from datetime import datetime
 from models.base_model import BaseModel
-""" Testing base model """
 
 
 class TestBaseModel(unittest.TestCase):
@@ -70,3 +71,7 @@ class TestBaseModel(unittest.TestCase):
         old_update2 = self.my_model2.updated_at
         self.my_model2.save()
         self.assertNotEqual(old_update2, self.my_model2.updated_at)
+
+
+if __name__ == '__main__':
+    unittest.main()
