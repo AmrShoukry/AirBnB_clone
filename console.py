@@ -195,4 +195,5 @@ class HBNBCommand(cmd.Cmd):
 
 
 if __name__ == '__main__':
+    """this is the initialisation of the cmdloop"""
     HBNBCommand().cmdloop()
