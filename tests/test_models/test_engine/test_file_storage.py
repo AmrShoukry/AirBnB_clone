@@ -2,6 +2,7 @@
 """ Testing """
 import unittest
 
+
 class TestConsole(unittest.TestCase):
     """ Test class """
 
