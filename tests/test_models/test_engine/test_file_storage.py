@@ -30,7 +30,12 @@ class TestConsole(unittest.TestCase):
 
     def test_search(self):
         """ Testing save(self) """
-        self.assertEqual(1, 1)
+        basemodel_instance = BaseModel()
+        self.storage_tester.new(basemodel_instance)
+        models_dict = self.storage_tester.all()
+        key = "BaseModel" + basemodel_instance.id
+        found = self.storage_tester.search(key)
+        self.assertEqual(found, basemodel_instance)
 
     def test_destroy(self):
         """ Testing save(self) """
