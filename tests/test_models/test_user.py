@@ -4,6 +4,7 @@ import unittest
 from datetime import datetime
 from models.user import User
 
+
 class TestConsole(unittest.TestCase):
     """ Test class """
 
@@ -34,7 +35,6 @@ class TestConsole(unittest.TestCase):
         self.assertIsInstance(self.my_model2.created_at, datetime)
         self.assertIsInstance(self.my_model2.updated_at, datetime)
         self.assertIsInstance(self.my_model2.Age, int)
-
 
 
 if __name__ == '__main__':
