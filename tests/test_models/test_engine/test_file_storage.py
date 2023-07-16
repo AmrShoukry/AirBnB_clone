@@ -2,6 +2,7 @@
 """ Testing """
 import unittest
 from models.engine.file_storage import FileStorage
+from models.base_model import BaseModel
 
 
 class TestConsole(unittest.TestCase):
@@ -17,7 +18,11 @@ class TestConsole(unittest.TestCase):
 
     def test_new(self):
         """ Testing new(self) """
-        self.assertEqual(1, 1)
+        basemodel_instance = BaseModel()
+        self.storage_tester.new(basemodel_instance)
+        models_dict = self.storage_tester.all()
+        key = "BaseModel" + basemodel_instance.id
+        self.assertEqual(models_dict[key], basemodel_instance)
 
     def test_reload(self):
         """ Testing save(self) """
