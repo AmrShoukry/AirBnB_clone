@@ -121,6 +121,7 @@ class HBNBCommand(cmd.Cmd):
         array = line.split(", ")
         if array[1].startswith("{"):
             dictionary_string = line.split(", ", 1)[1][:-1]
+            dictionary_string = dictionary_string.replace("'", "\"")
             dictionary = json.loads(dictionary_string)
             self.update_dictionary(dictionary, class_name, id)
         elif len(array) >= 3:
