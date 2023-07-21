@@ -17,6 +17,15 @@
     padding-right: 30px;
 }
 
+.filters .links
+{
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    flex-grow: 1;
+}
+
 .filters button
 {
     font-size: 18px;
@@ -29,34 +38,47 @@
     margin-left: auto;
 }
 
-.filters button:hover
+.filters .icon
+{
+    display: none;
+    width: 35px;
+    height: 35px;
+    background-image: url(../images/icon_search.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+
+.filters button:hover,
+.filters .icon:hover
 {
     opacity: 0.9;
 }
 
-.filters > div
+.filters .links > div
 {
     height: 100%;
-    width: 25%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     position: relative;
 }
 
-.filters > div:nth-of-type(odd)
+.filters .links > div:nth-of-type(odd)
 {
     border-right: 1px solid #DDDDDD;
 }
 
-.filters div h3
+.filters .links div h3
 {
     font-weight: 600;
     margin: 0;
     margin-left: var(--ul_left_space);
 }
 
-.filters div h4
+.filters .links div h4
 {
     font-size: 14px;
     font-weight: 400;
@@ -64,7 +86,7 @@
     margin-left: var(--ul_left_space);
 }
 
-.filters > div .popover
+.filters .links > div .popover
 {
     background-color: #FAFAFA;
     width: 100%;
@@ -79,31 +101,60 @@
     display: none;
 }
 
-.filters > div .popover ul
+.filters .links > div .popover ul
 {
     list-style-type: none;
     padding-left: 0;
     margin: 0;
 }
 
-.filters > div .popover h2
+.filters .links > div .popover h2
 {
     margin: 0 calc(var(--ul_left_space) / 2);
     font-size: 16px;
 }
 
-.filters > div .popover h2:not(:first-of-type)
+.filters .links > div .popover h2:not(:first-of-type)
 {
     margin-top: 20px;
 }
 
-.filters > div .popover li
+.filters .links > div .popover li
 {
     margin-left: var(--ul_left_space);
 }
 
 
-.filters > div:hover .popover
+.filters .links > div:hover .popover
 {
     display: block;
+}
+
+@media (max-width: 768px)
+{
+    :root 
+    {
+        --ul_left_space: 15px;
+    }
+
+    .filters
+    {
+        padding-right: 8px;
+    }
+
+    .filters button
+    {
+        display: none;
+    }
+
+    .filters .icon
+    {
+        display: block;
+    }
+
+    .filters .links > div
+    {
+        padding: 4px;
+    }
+
 }
